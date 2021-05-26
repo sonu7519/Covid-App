@@ -1,0 +1,44 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en" class="h-100">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <title>Contact Us</title>
+    <link rel="shortcut icon" href="{% static 'photo/favicon.ico'%}" type="image/x-icon">
+  </head>
+  <body class="h-100"> 
+      <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-10 col-md-8 col-lg-6">
+                <h1 class="row h-100 justify-content-center align-items-center">Contact Us</h1>
+                <form class="form-example" method="POST"> {% csrf_token %}
+                    <div class="form-group">
+                        <label name="name" for="name">Name</label>
+                        <input type="text" class="form-control name" placeholder="Enter your Name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                        <input name="email" type="email" class="form-control"  placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="form-label">Summary</label>
+                        <textarea name="summary" class="form-control" rows="3"></textarea>
+                    </div><br>
+                    <input type="submit" class="btn btn-primary btn-customized align-items-center"></input>
+
+                </form>
+            </div>
+        </div>
+    </div>  
+    <script src="{% static 'js/min.js' %}"></script>
+
+  </body>
+</html>

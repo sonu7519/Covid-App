@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+    {% block title %}
+    <title>Covid Metre</title>
+    <link rel="shortcut icon" href="{% static 'photo/favicon.ico'%}" type="image/x-icon">
+    {% endblock title %}
+
+    {% block spinnercss %}
+    <style>
+      /* Center the loader */
+      #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 120px;
+        height: 120px;
+        margin: -76px 0 0 -76px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        border-right: 16px solid green;
+        border-bottom: 16px solid red;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+      
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Add animation to "page content" */
+      .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s
+      }
+      
+      @-webkit-keyframes animatebottom {
+        from { bottom:-100px; opacity:0 } 
+        to { bottom:0px; opacity:1 }
+      }
+      
+      @keyframes animatebottom { 
+        from{ bottom:-100px; opacity:0 } 
+        to{ bottom:0; opacity:1 }
+      }
+      
+      #myDiv {
+        display: none;
+        text-align: center;
+      }
+      </style>
+ 
+       {% endblock spinnercss %}
+
+  </head>
+  {% block spinnerbody %}
+  <body  onload="myFunction()" style="margin:0;">
+    <div id="loader"></div>
+
+<div style="display:none;" id="myDiv" class="animate-bottom">
+
+            {% endblock spinnerbody %}
+
+        {% block navbar %}
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/">Covid Metre</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link " href="{% url 'contact' %}" tabindex="-1" aria-disabled="true">Contact Us</a>
+                </li>
+              </ul>
+              <!-- <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form> -->
+              <form class="d-flex" action="" method="post"> {% csrf_token %}
+                <select  class="form-select" aria-label="Default select example" name="selectcountry" id="">
+                  {% for country_name in country %}
+                    <option>{{country_name}}</option>
+                  {% endfor %}
+                </select>
+                &nbsp;&nbsp;
+                <input type="submit" name="" class="btn btn-success">
+              </form> 
+            </div>
+          </div>
+        </nav>
+        
+        {% endblock navbar %}
+<!-- Carding view -->
+
+        {% block body %}
+<div class="container py-5" id="custom-cards"><br>
+  <h2 class="pb-2 border-bottom">{{user_selected_country_name}}</h2>
+  
+    <div class="row row-cols-3 align-items-stretch py-5">
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-warning rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Total Cases</h2>
+            <h2>{{case}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+             
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-success rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Total Recover</h2>
+            <h2>{{recovered}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-danger rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Total Death</h2>
+            <h2>{{death}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New  Record -->
+
+
+  <div class="container py-5" id="custom-cards">
+    
+  
+    <div class="row row-cols-3 align-items-stretch py-5">
+      <div class="col">
+        
+        <div class="card card-cover h-100 overflow-hidden text-white bg-warning rounded-5 shadow-lg">
+          
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">New Cases</h2>
+            <h2>{{new_case}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+             
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-success rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">New Recover</h2>
+            <h2>{{new_recovered}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-danger rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">New Deaths</h2>
+            <h2>{{new_death}}</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+             
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  {% endblock body %}
+
+  </div>
+
+  {% block spinnerjs %}
+  <script>
+    var myVar;
+    
+    function myFunction() {
+      myVar = setTimeout(showPage, 2000);
+    }
+    
+    function showPage() {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("myDiv").style.display = "block";
+    }
+    </script>
+
+    {% endblock spinnerjs %}
+    <script src="{% static 'js/min.js' %}"></script>
+
+    
+  </body>
+</html>
